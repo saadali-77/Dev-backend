@@ -1,25 +1,17 @@
 const express=require('express')
 
 const app= express();
-app.use('/test',(req,res,next)=>{
-   // res.send(' welcome back imran khan 111')
-    next()
-},(req,res,next)=>{
-   // res.send('welcome imran 222')
-    next()
-},(req,res)=>{
-    res.send('welcome imran 333')
+
+ const {AdminAuth}= require('./middlewares/auth.js')
+
+app.use('/admin',AdminAuth)
+app.get('/admin/data',(req,res)=>{
+    res.send('get admin all data that')
 })
-app.get('/user/:userid',(req,res)=>{
-    console.log(req.params)
-    res.send({
-        firstName:'saad',
-        lastName:'ali'
-    })
-})
+
 
 
 
 app.listen(3000,()=>{
-    console.log('server is listening on port 3000')
+    console.log('server is listening on the port 3000')
 })
