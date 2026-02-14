@@ -1,17 +1,36 @@
 const express=require('express')
-
 const app= express();
+const ConnectDB=require('./config/database')
+const User=require('./models/user')
 
- const {AdminAuth}= require('./middlewares/auth.js')
 
-app.use('/admin',AdminAuth)
-app.get('/admin/data',(req,res)=>{
-    res.send('get admin all data that')
+app.post('/signup',async(req,res)=>{
+const user=new User({
+    firstName:'saad',
+    lastName:'Ali',
+    emailId:'saadali@gmail.com',
+    password:'saadali@'
 })
+try
+{
+    await user.save()
+res.send('user added or sign sucessfully')
+}
+catch(err){
+res.status(400).send('found an error' + err.message)
+}})
 
 
 
 
-app.listen(3000,()=>{
-    console.log('server is listening on the port 3000')
+
+ConnectDB().then(()=>{
+    console.log('Database connect suceesfully')
+    app.listen(3000,()=>{
+        console.log('server is listening on the port 3000')
+    })
+
+
+}).catch(err=>{
+console.log('cannot connect database + err.message')
 })
