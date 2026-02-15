@@ -2,15 +2,12 @@ const express=require('express')
 const app= express();
 const ConnectDB=require('./config/database')
 const User=require('./models/user')
-
+app.use(express.json())
 
 app.post('/signup',async(req,res)=>{
-const user=new User({
-    firstName:'saad',
-    lastName:'Ali',
-    emailId:'saadali@gmail.com',
-    password:'saadali@'
-})
+    console.log(req.body)
+    
+const user=new User(req.body)
 try
 {
     await user.save()
@@ -18,7 +15,8 @@ res.send('user added or sign sucessfully')
 }
 catch(err){
 res.status(400).send('found an error' + err.message)
-}})
+}
+})
 
 
 
