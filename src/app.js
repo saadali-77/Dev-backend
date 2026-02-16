@@ -4,7 +4,7 @@ const ConnectDB=require('./config/database')
 const User=require('./models/user')
 app.use(express.json())
 //get specific user
-app.use('/user',async(req,res)=>{
+app.get('/user',async(req,res)=>{
     const email= req.body.emailId
     try{
    const users=  await User.findOne({emailId:email})
@@ -19,6 +19,32 @@ app.use('/user',async(req,res)=>{
     console.log(err.message)
  }
 })
+//delete api to delete user from db
+app.delete('/user',async(req,res)=>{
+    const userId=req.body.userId
+    try{
+    const user=  await  User.findByIdAndDelete(userId)
+    res.send('user delete successfully from database')
+    }catch(err){
+        console.log(err.message)
+    }
+})
+app.patch('/user',async(req,res)=>{
+    const userId=req.body.userId
+    const data= req.body
+try {  await User.findByIdAndUpdate({_id:userId},data,{
+    runValidators:true
+})
+res.send('user update sucessfully')
+console.log('user update sucessfully')
+}catch(err){
+    console.log(err.message)
+}
+
+})
+
+
+
 //feed will get all user from db just put {}
 app.use('/feed',async(req,res)=>{
     const email= req.body
