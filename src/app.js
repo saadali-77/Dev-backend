@@ -1,8 +1,14 @@
 const express=require('express')
 const app= express();
+const cookieparser= require('cookie-parser')
 const ConnectDB=require('./config/database')
+const {AdminAuth} =require('./middlewares/auth')
 const User=require('./models/user')
+ const signupvalidate= require('./utils/validation')
+ const jwt=require('jsonwebtoken')
+ const bcrypt= require('bcrypt')
 app.use(express.json())
+app.use(cookieparser())
 //get specific user
 app.get('/user',async(req,res)=>{
     const email= req.body.emailId
@@ -70,11 +76,14 @@ console.log('something go wrong')
 })
 
 app.post('/signup',async(req,res)=>{
+    try
+    {
+    signupvalidate(req)
     console.log(req.body)
-    
-const user=new User(req.body)
-try
-{
+    const {password,firstName,lastName,emailId}= req.body
+    const hashedPassword= await bcrypt.hash(password,10)
+    console.log(hashedPassword)
+const user=new User({firstName,lastName,emailId,password:hashedPassword})
     await user.save()
 res.send('user added or sign sucessfully')
 }
@@ -82,8 +91,46 @@ catch(err){
 res.status(400).send('found an error' + err.message)
 }
 })
+app.get('/login',async(req,res)=>{
+    const {emailId,password}= req.body
+try{
 
-
+ const user=   await User.findOne({emailId:emailId})
+ if(!user){
+    return res.status(404).send('invalid credentials')
+ }
+  const ispasswordvalid= await user.validatePassword(password)
+  if(ispasswordvalid){
+    const token= await user.getjwt()
+   // const token= await jwt.sign({_id:user._id},'pnjiiiii',{expiresIn:'1h'})
+ console.log(token)
+    res.cookie('token',token,{expires: new Date(Date.now()+3600000)})
+      res.send('login successfull')
+  } else{
+ throw new Error('invalid credentials')
+  }
+}
+catch(err){
+    console.log(err.message)
+}})
+app.get('/profile',AdminAuth,async(req,res)=>{
+ const user=req.user
+   try {
+   
+  res.send(user)
+  console.log(user)
+}
+ 
+   
+catch(err){
+    console.log(err.message)
+}}
+)
+app.post('/sendconnectionRequest',AdminAuth,async(req,res)=>{
+    const user=req.user
+    res.send(user.firstName + ' send connection request')
+    console.log('send connection request')
+})
 
 
 
