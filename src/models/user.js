@@ -22,6 +22,10 @@ const userSchema = mongoose.Schema(
         if (!validator.isEmail(value)) {
           throw new Error("email is not valid: " + value)
         }
+        const domain = value.split('@')[1]
+        if (!["gmail.com","yahoo.com","outlook.com"].includes(domain)) {
+          throw new Error("Email domain is not supported. Use gmail.com, yahoo.com, or outlook.com")
+        }
       }
     },
     password: {

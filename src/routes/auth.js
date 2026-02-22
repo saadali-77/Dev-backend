@@ -1,15 +1,15 @@
 const express=  require('express')
  const authRouter= express.Router()
   const User= require('../models/user')
-  const signupvalidate= require('../utils/validation')
-  const jwt=require('jsonwebtoken')
+  const {validateSignup}= require('../utils/validation')
+  //const jwt=require('jsonwebtoken')
   const bcrypt= require('bcrypt')
   //const { AdminAuth } = require('../middlewares/auth')
 
 authRouter.post('/signup',async(req,res)=>{
     try
     {
-    signupvalidate(req)
+    validateSignup(req)
     console.log(req.body)
     const {password,firstName,lastName,emailId}= req.body
     const hashedPassword= await bcrypt.hash(password,10)
@@ -44,7 +44,11 @@ try{
 catch(err){
     console.log(err.message)
 }})
-
+authRouter.post('/logout',async(req,res)=>{
+  res.cookie('token',null,{expires: new Date(Date.now())})
+  res.send('logout sucessfully')
+  
+})
 
 
 
