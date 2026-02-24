@@ -51,6 +51,8 @@ const userSchema = mongoose.Schema(
     },
     photoUrl: {
       type: String,
+
+      
       validate(value) {
         if (!validator.isURL(value)) {
           throw new Error("photo url is not valid: " + value)
