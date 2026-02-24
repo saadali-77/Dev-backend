@@ -2,6 +2,7 @@ const express= require('express')
 const userRouter= express.Router()
 const {AdminAuth}= require('../middlewares/auth')
 const ConnectionReq = require('../models/connectionReq')
+const User= require('../models/user')
 userRouter.get('/user/requests/received',AdminAuth,async(req,res)=>{
     try{
 
@@ -41,6 +42,41 @@ userRouter.get('/user/connections',AdminAuth, async(req,res)=>{
         res.send(err.message)
     }
 })
+userRouter.get('/user/feed',AdminAuth, async(req,res)=>{
 
+    try{
+const loggedinUser= req.user
+const page= parseInt(req.query.page) || 1
+let limit= parseInt(req.query.limit) || 10
+limit= limit>100?100:limit
+const skip= (page-1)*limit
+const connectionReqs= await ConnectionReq.find({
+    $or:[{
+        fromUserId:loggedinUser._id
+    },
+    {
+        toUserId:loggedinUser._id
+    }]
+}).select("fromUserId toUserId")
+const hideUser= new Set()
+connectionReqs.forEach((req)=>{
+    hideUser.add(req.fromUserId.toString())
+    hideUser.add(req.toUserId.toString())
+})
+//console.log(hideUser)
+const users= await User.find({
+$and:[
+    {_id:{$ne:loggedinUser._id}},
+    {_id:{$nin:Array.from(hideUser)}}
+]
+
+}).select("firstName lastName ").skip(skip).limit(limit)
+res.json(users)
+
+    }
+    catch(err){
+        res.status(400).send(err.message)
+    }
+})
 
 module.exports= userRouter;
