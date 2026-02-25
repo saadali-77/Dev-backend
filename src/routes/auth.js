@@ -22,7 +22,7 @@ catch(err){
 res.status(400).send('found an error' + err.message)
 }
 })
-authRouter.get('/login',async(req,res)=>{
+authRouter.post('/login',async(req,res)=>{
     const {emailId,password}= req.body
 try{
 
