@@ -49,16 +49,33 @@ const userSchema = mongoose.Schema(
         }
       }
     },
-    photoUrl: {
-      type: String,
-      default:"https://static.vecteezy.com/system/resources/previews/052/755/981/non_2x/a-man-profile-avatar-icon-with-a-white-background-free-vector.jpg",
-     // default:"https://media.gettyimages.com/id/2216206881/photo/jack-della-maddalena-ufc-shoot.jpg?s=612x612&w=gi&k=20&c=ZzhZ0phBoa7uXRzHI_20shmPNCnHDVD6ZLuoqPdbHZI= ",
-      validate(value) {
-        if (!validator.isURL(value)) {
-          throw new Error("photo url is not valid: " + value)
-        }
-      }
-    },
+
+photoUrl: {
+  type: String,
+  default:
+    "https://static.vecteezy.com/system/resources/previews/052/755/981/non_2x/a-man-profile-avatar-icon-with-a-white-background-free-vector.jpg",
+  validate(value) {
+    if (
+      !validator.isURL(value, {
+        protocols: ["http", "https"],
+        require_protocol: true,
+        allow_query_components: true, // ✅ allow ?v=...
+      })
+    ) {
+      throw new Error("photo url is not valid: " + value);
+    }
+  },
+},
+    // photoUrl: {
+    //   type: String,
+    //   default:"https://static.vecteezy.com/system/resources/previews/052/755/981/non_2x/a-man-profile-avatar-icon-with-a-white-background-free-vector.jpg",
+    //  // default:"https://media.gettyimages.com/id/2216206881/photo/jack-della-maddalena-ufc-shoot.jpg?s=612x612&w=gi&k=20&c=ZzhZ0phBoa7uXRzHI_20shmPNCnHDVD6ZLuoqPdbHZI= ",
+    //   validate(value) {
+    //     if (!validator.isURL(value)) {
+    //       throw new Error("photo url is not valid: " + value)
+    //     }
+    //   }
+    // },
     about: {
       type: String,
       default: 'this is information about the user',

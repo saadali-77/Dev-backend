@@ -42,35 +42,72 @@ requestRouter.post('/request/send/:status/:toUserId', AdminAuth, async(req,res)=
     res.status(400).send(err.message)
   }
 })
-requestRouter.post('/request/review/:status/:requestId', AdminAuth, async(req,res)=>{
-  try{
-    const loggedInUserId = req.user
-    const { requestId, status } = req.params
-   const allowedStatus= ["accepted","rejected","ignored"]
-   if(!allowedStatus.includes(status)){
-    throw new Error('status is not valid')
-   }
-   const connectionReq = await ConnectionReq.findById({
-    _id: requestId,
-    toUserId: loggedInUserId,
-    status: 'interested'
-   })
+requestRouter.post(
+  '/request/review/:status/:requestId',
+  AdminAuth,
+  async (req, res) => {
+    try {
+      const loggedInUserId = req.user; // assuming this is the ObjectId
+      const { requestId, status } = req.params;
 
-   if(!connectionReq){
-     res.status(404).send('connection request not found')
+      const allowedStatus = ["accepted", "rejected", "ignored"];
+      if (!allowedStatus.includes(status)) {
+        return res.status(400).send("Status is not valid");
+      }
 
-   }
-   connectionReq.status= status
-   const data= await connectionReq.save()
-   res.json({
-    message: `connection request ${status}`,
-    data
-   })
-  
-  }catch(err){
-    res.status(400).send(err.message)
+      const connectionReq = await ConnectionReq.findOne({
+        _id: requestId,
+        toUserId: loggedInUserId, // corrected
+        status: "interested",
+      });
+
+      if (!connectionReq) {
+        return res.status(404).send("Connection request not found");
+      }
+
+      connectionReq.status = status;
+      const data = await connectionReq.save();
+
+      res.json({
+        message: `Connection request ${status}`,
+        data,
+      });
+    } catch (err) {
+      res.status(400).send(err.message);
+    }
   }
-})
+);
+
+
+// requestRouter.post('/request/review/:status/:requestId', AdminAuth, async(req,res)=>{
+//   try{
+//     const loggedInUserId = req.user
+//     const { requestId, status } = req.params
+//    const allowedStatus= ["accepted","rejected","ignored"]
+//    if(!allowedStatus.includes(status)){
+//     throw new Error('status is not valid')
+//    }
+//    const connectionReq = await ConnectionReq.findOne({
+//     _id: requestId,
+//     toUserId: loggedInUserId._Id,
+//     status: 'interested'
+//    })
+
+//    if(!connectionReq){
+//      res.status(404).send('connection request not found')
+
+//    }
+//    connectionReq.status= status
+//    const data= await connectionReq.save()
+//    res.json({
+//     message: `connection request ${status}`,
+//     data
+//    })
+  
+//   }catch(err){
+//     res.status(400).send(err.message)
+//   }
+// })
 module.exports = requestRouter
 
 

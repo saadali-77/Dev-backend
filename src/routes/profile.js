@@ -13,6 +13,7 @@ profileRouter.get('/profile/view',AdminAuth,async(req,res)=>{
  
    
 catch(err){
+  res.status(401).send(err.message)
     console.log(err.message)
 }
 })
