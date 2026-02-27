@@ -70,7 +70,7 @@ $and:[
     {_id:{$nin:Array.from(hideUser)}}
 ]
 
-}).select("firstName lastName ").skip(skip).limit(limit)
+}).select("firstName lastName photoUrl skills age").skip(skip).limit(limit)
 res.json(users)
 
     }
