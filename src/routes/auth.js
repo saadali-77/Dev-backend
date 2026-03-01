@@ -35,7 +35,11 @@ try{
     const token= await user.getjwt()
    // const token= await jwt.sign({_id:user._id},'pnjiiiii',{expiresIn:'1h'})
  console.log(token)
-    res.cookie('token',token,{expires: new Date(Date.now()+3600000)})
+    res.cookie('token',token,{
+     secure: true,           // ✅ ensures cookie is sent only over HTTPS
+  sameSite: 'None',
+     
+     expires: new Date(Date.now()+3600000)})
      // res.send('login successfull')
      res.send(user)
   } else{
