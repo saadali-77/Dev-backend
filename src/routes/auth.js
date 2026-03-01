@@ -46,7 +46,13 @@ catch(err){
     res.status(404).send(err.message)
 }})
 authRouter.post('/logout',async(req,res)=>{
-  res.cookie('token',null,{expires: new Date(Date.now())})
+  res.cookie('token',null,
+               
+    {httpOnly: true,
+  secure: true,       // HTTPS only (required for Vercel)
+  sameSite: 'none',   // allows cross-domain
+              
+              expires: new Date(Date.now())})
   res.send('logout sucessfully')
   
 })
