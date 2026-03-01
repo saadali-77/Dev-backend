@@ -25,10 +25,10 @@ const profileRouter = require('./routes/profile');
 const requestRouter = require('./routes/request');
 const userRouter = require('./routes/user');
 
-app.use('/api', authRouter);
-app.use('/api', profileRouter);
-app.use('/api', requestRouter);
-app.use('/api', userRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/profile', profileRouter);
+app.use('/api/request', requestRouter);
+app.use('/api/user', userRouter);
 
 // Export app for Vercel serverless
 module.exports = app;
