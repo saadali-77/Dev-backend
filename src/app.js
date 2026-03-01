@@ -24,6 +24,15 @@ const authRouter = require('./routes/auth');
 const profileRouter = require('./routes/profile');
 const requestRouter = require('./routes/request');
 const userRouter = require('./routes/user');
+app.get('/api/test-db', async (req, res) => {
+  try {
+    const User = require('./models/user');
+    const users = await User.find({}).limit(1);
+    res.status(200).json({ message: 'DB connected!', sample: users[0] || null });
+  } catch (err) {
+    res.status(500).json({ message: 'DB not reachable', error: err.message });
+  }
+});
 
 app.use('/', authRouter);
 app.use('/', profileRouter);
