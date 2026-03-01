@@ -96,8 +96,8 @@ app.use('/',userRouter)
 
 ConnectDB().then(()=>{
     console.log('Database connect now  suceesfully')
-    app.listen(3000,()=>{
-        console.log('server is listening on the port 3000')
+    //app.listen(3000,()=>{
+       // console.log('server is listening on the port 3000')
     })
 
 
