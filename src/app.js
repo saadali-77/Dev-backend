@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'https://devtindersaad.com/',
+    origin: 'https://devtinder-frontend-virid.vercel.app/',
     credentials: true,
   })
 );
