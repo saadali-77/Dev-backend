@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'https://dev-frontend-tf7d.vercel.app/login',
+    origin: 'https://devtindersaad.com/',
     credentials: true,
   })
 );
