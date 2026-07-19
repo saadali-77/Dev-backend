@@ -4,10 +4,7 @@ const cookieParser = require('cookie-parser');
 const ConnectDB = require('./config/database');
 const cors = require('cors');
 
-// Connect MongoDB Atlas
-ConnectDB()
-  .then(() => console.log('Database connected successfully'))
-  .catch(err => console.log('Cannot connect database', err));
+
 
 // Middleware
 app.use(express.json());
@@ -18,6 +15,17 @@ app.use(
     credentials: true,
   })
 );
+app.use(async (req, res, next) => {
+  try {
+    await ConnectDB();
+    next();
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Database connection failed" });
+  }
+});
+
+
 
 // Routes with /api prefix for Vercel clarity
 const authRouter = require('./routes/auth');
