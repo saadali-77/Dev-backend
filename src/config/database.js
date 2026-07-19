@@ -1,6 +1,14 @@
-const mongoose=require('mongoose')
-const ConnectDB= async()=>{
-await mongoose.connect('mongodb+srv://saadnode:fBd45iI0i968ZWzw@saadnode.bvlplpr.mongodb.net/devtinder')
+const mongoose = require("mongoose");
 
-}
-module.exports= ConnectDB
+let isConnected = false;
+
+const ConnectDB = async () => {
+  if (isConnected) return;
+
+  await mongoose.connect(process.env.MONGODB_URI);
+
+  isConnected = true;
+  console.log("MongoDB Connected");
+};
+
+module.exports = ConnectDB;
