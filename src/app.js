@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'https://dev-frontend-tf7d.vercel.app', // NO trailing slash
+    origin: 'https://dev-frontend-tf7d.vercel.app/login',
     credentials: true,
   })
 );
