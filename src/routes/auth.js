@@ -64,9 +64,17 @@ authRouter.post("/login", async (req, res) => {
     });
 
     res.status(200).json(user);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
+  } 
+catch (err) {
+  console.error("LOGIN ERROR:", err);
+
+  res.status(500).json({
+    message: err.message,
+    stack: err.stack,
+  });
+}
+
+  
 });
 
 authRouter.post("/logout", (req, res) => {
