@@ -41,7 +41,12 @@ app.get('/api/test-db', async (req, res) => {
     res.status(500).json({ message: 'DB not reachable', error: err.message });
   }
 });
-
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "DevTinder Backend is running 🚀",
+  });
+});
 app.use('/', authRouter);
 app.use('/', profileRouter);
 app.use('/', requestRouter);
