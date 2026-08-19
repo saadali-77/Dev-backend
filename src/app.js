@@ -58,7 +58,7 @@ app.get("/api/test-db", async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "DB connected!",
+      message: "DB connected ss!",
       sample: users[0] || null,
     });
   } catch (err) {
@@ -95,6 +95,13 @@ app.use("/", userRouter);
 // =========================
 // Export
 // =========================
+
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
 
 module.exports = app;
 
