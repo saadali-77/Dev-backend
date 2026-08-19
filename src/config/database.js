@@ -5,7 +5,7 @@ let isConnected = false;
 const ConnectDB = async () => {
   if (isConnected) return;
 
-  await mongoose.connect(mongodb+srv://saadnode:Rysnqi5O4dPH7wTi@cluster0.jmcv49s.mongodb.net/devtinders);
+  await mongoose.connect(process.env.MONGODB_URI);
 
   isConnected = true;
   console.log("MongoDB Connected");
